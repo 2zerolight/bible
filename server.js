@@ -20,8 +20,13 @@ app.use(express.static('public'));
 // 라우트 설정
 app.use('/api/bible', bibleRoutes);
 
-// 기본 라우트
+// 기본 라우트 - 메인 페이지 제공
 app.get('/', (req, res) => {
+  res.sendFile(__dirname + '/public/index.html');
+});
+
+// API 정보 라우트
+app.get('/api', (req, res) => {
   res.json({
     message: '성경 조회 API에 오신 것을 환영합니다!',
     version: '1.0.0',
