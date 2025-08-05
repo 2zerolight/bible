@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>성경책 보기 서비스</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 헤더 -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">
+                    <i class="fas fa-book-bible"></i>
+                    성경책 보기
+                </h1>
+                <div class="search-container">
+                    <input type="text" id="searchInput" placeholder="성경 내용을 검색하세요..." class="search-input">
+                    <button id="searchBtn" class="search-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <button id="settingsBtn" class="settings-btn">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- 메인 컨텐츠 -->
+        <main class="main-content">
+            <!-- 사이드바 -->
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">
+                        <i class="fas fa-list"></i>
+                        성경 책
+                    </h3>
+                    
+                    <!-- 구약/신약 분류 -->
+                    <div class="testament-section">
+                        <div class="testament-header old-testament">
+                            <i class="fas fa-scroll"></i>
+                            <span>구약 (39권)</span>
+                        </div>
+                        <div class="book-list old-testament-books" id="oldTestamentBooks">
+                            <!-- 구약 책 목록이 여기에 동적으로 로드됩니다 -->
+                        </div>
+                    </div>
+                    
+                    <div class="testament-section">
+                        <div class="testament-header new-testament">
+                            <i class="fas fa-cross"></i>
+                            <span>신약 (27권)</span>
+                        </div>
+                        <div class="book-list new-testament-books" id="newTestamentBooks">
+                            <!-- 신약 책 목록이 여기에 동적으로 로드됩니다 -->
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- 메인 영역 -->
+            <div class="content-area">
+                <!-- 로딩 상태 -->
+                <div id="loading" class="loading hidden">
+                    <div class="spinner"></div>
+                    <p>로딩 중...</p>
+                </div>
+
+                <!-- 환영 메시지 -->
+                <div id="welcomeMessage" class="welcome-message">
+                    <div class="welcome-content">
+                        <i class="fas fa-book-open"></i>
+                        <h2>성경책 보기 서비스에 오신 것을 환영합니다</h2>
+                        <p>왼쪽에서 성경 책을 선택하거나 위에서 검색해보세요.</p>
+                        
+                        <!-- 오늘의 추천 성경말씀 -->
+                        <div class="daily-verse-section">
+                            <h3 class="daily-verse-title">
+                                <i class="fas fa-star"></i>
+                                오늘의 추천 성경말씀
+                            </h3>
+                            <div class="daily-verse-card">
+                                <div class="daily-verse-reference" id="dailyVerseReference">
+                                    <!-- 오늘의 말씀 참조가 여기에 표시됩니다 -->
+                                </div>
+                                <div class="daily-verse-content" id="dailyVerseContent">
+                                    <!-- 오늘의 말씀 내용이 여기에 표시됩니다 -->
+                                </div>
+                                <button id="readDailyVerse" class="read-verse-btn">
+                                    <i class="fas fa-book-open"></i>
+                                    전체 읽기
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="quick-stats">
+                            <div class="stat-item">
+                                <i class="fas fa-book"></i>
+                                <span id="totalBooks">-</span>
+                                <label>성경 책</label>
+                            </div>
+                            <div class="stat-item">
+                                <i class="fas fa-chapter"></i>
+                                <span id="totalChapters">-</span>
+                                <label>총 장</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 책 정보 -->
+                <div id="bookInfo" class="book-info hidden">
+                    <div class="book-header">
+                        <h2 id="bookTitle">책 제목</h2>
+                        <div class="book-meta">
+                            <span id="bookTestament" class="testament-badge"></span>
+                            <span id="bookChapters" class="chapters-info"></span>
+                        </div>
+                    </div>
+                    <div class="chapter-list" id="chapterList">
+                        <!-- 장 목록이 여기에 동적으로 로드됩니다 -->
+                    </div>
+                </div>
+
+                <!-- 장 내용 -->
+                <div id="chapterContent" class="chapter-content hidden">
+                    <div class="chapter-header">
+                        <button id="backToBook" class="back-btn">
+                            <i class="fas fa-arrow-left"></i>
+                            책으로 돌아가기
+                        </button>
+                        <h2 id="chapterTitle">장 제목</h2>
+                    </div>
+                    <div class="verses-container" id="versesContainer">
+                        <!-- 절 내용이 여기에 동적으로 로드됩니다 -->
+                    </div>
+                </div>
+
+                <!-- 검색 결과 -->
+                <div id="searchResults" class="search-results hidden">
+                    <div class="search-header">
+                        <h2>검색 결과</h2>
+                        <button id="clearSearch" class="clear-search-btn">
+                            <i class="fas fa-times"></i>
+                            검색 초기화
+                        </button>
+                    </div>
+                    <div class="search-results-list" id="searchResultsList">
+                        <!-- 검색 결과가 여기에 동적으로 로드됩니다 -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 설정 모달 -->
+    <div id="settingsModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>설정</h3>
+                <button id="closeSettings" class="close-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-item">
+                    <label for="baptismType">세례/침례 단어 선택:</label>
+                    <select id="baptismType" class="setting-select">
+                        <option value="세례">세례</option>
+                        <option value="침례">침례</option>
+                    </select>
+                </div>
+                <div class="setting-description">
+                    <p><strong>세례:</strong> 개신교에서 주로 사용하는 용어</p>
+                    <p><strong>침례:</strong> 침례교에서 주로 사용하는 용어</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="saveSettings" class="save-btn">저장</button>
+                <button id="cancelSettings" class="cancel-btn">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
