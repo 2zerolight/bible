@@ -15,6 +15,8 @@ class BibleViewer {
         await this.loadSettings();
         await this.loadDailyVerse();
         this.updateStats();
+        this.setCurrentDate();
+        this.bindShareEvent();
     }
 
     bindEvents() {
@@ -579,6 +581,58 @@ class BibleViewer {
         
         // 오늘의 추천 성경말씀 다시 로드
         this.loadDailyVerse();
+    }
+
+    // 현재 날짜 설정
+    setCurrentDate() {
+        const now = new Date();
+        const options = { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric',
+            weekday: 'long'
+        };
+        const dateString = now.toLocaleDateString('ko-KR', options);
+        const dateElement = document.getElementById('currentDate');
+        if (dateElement) {
+            dateElement.textContent = dateString;
+        }
+    }
+
+    // 공유 이벤트 바인딩
+    bindShareEvent() {
+        const shareBtn = document.getElementById('shareVerse');
+        if (shareBtn) {
+            shareBtn.addEventListener('click', () => this.shareVerse());
+        }
+    }
+
+    // 성경 말씀 공유
+    async shareVerse() {
+        try {
+            const response = await fetch('/api/bible/daily-verse');
+            const data = await response.json();
+            
+            if (data.success) {
+                const verse = data.data;
+                const shareText = `${verse.bookName} ${verse.chapterId}:${verse.verseId}\n\n"${verse.content}"\n\n- 성경책 보기 서비스에서 공유`;
+                
+                if (navigator.share) {
+                    await navigator.share({
+                        title: '오늘의 성경 말씀',
+                        text: shareText,
+                        url: window.location.href
+                    });
+                } else {
+                    // 클립보드에 복사
+                    await navigator.clipboard.writeText(shareText);
+                    this.showSuccessMessage('말씀이 클립보드에 복사되었습니다!');
+                }
+            }
+        } catch (error) {
+            console.error('공유 중 오류:', error);
+            this.showError('공유 중 오류가 발생했습니다.');
+        }
     }
 }
 

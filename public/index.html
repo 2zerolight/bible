@@ -70,43 +70,50 @@
                     <p>로딩 중...</p>
                 </div>
 
-                <!-- 환영 메시지 -->
+                <!-- 메인 콘텐츠 -->
                 <div id="welcomeMessage" class="welcome-message">
                     <div class="welcome-content">
-                        <i class="fas fa-book-open"></i>
-                        <h2>성경책 보기 서비스에 오신 것을 환영합니다</h2>
-                        <p>왼쪽에서 성경 책을 선택하거나 위에서 검색해보세요.</p>
-                        
                         <!-- 오늘의 추천 성경말씀 -->
-                        <div class="daily-verse-section">
-                            <h3 class="daily-verse-title">
-                                <i class="fas fa-star"></i>
-                                오늘의 추천 성경말씀
-                            </h3>
-                            <div class="daily-verse-card">
-                                <div class="daily-verse-reference" id="dailyVerseReference">
-                                    <!-- 오늘의 말씀 참조가 여기에 표시됩니다 -->
+                        <div class="daily-verse-hero">
+                            <div class="hero-header">
+                                <div class="hero-icon">
+                                    <i class="fas fa-sun"></i>
                                 </div>
-                                <div class="daily-verse-content" id="dailyVerseContent">
+                                <h1 class="hero-title">오늘의 말씀</h1>
+                                <p class="hero-subtitle">매일 새로운 성경 말씀으로 하루를 시작하세요</p>
+                            </div>
+                            
+                            <div class="daily-verse-card">
+                                <div class="verse-header">
+                                    <div class="verse-reference" id="dailyVerseReference">
+                                        <!-- 오늘의 말씀 참조가 여기에 표시됩니다 -->
+                                    </div>
+                                    <div class="verse-date">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span id="currentDate"></span>
+                                    </div>
+                                </div>
+                                
+                                <div class="verse-content" id="dailyVerseContent">
                                     <!-- 오늘의 말씀 내용이 여기에 표시됩니다 -->
                                 </div>
-                                <button id="readDailyVerse" class="read-verse-btn">
-                                    <i class="fas fa-book-open"></i>
-                                    전체 읽기
-                                </button>
+                                
+                                <div class="verse-actions">
+                                    <button id="readDailyVerse" class="primary-btn">
+                                        <i class="fas fa-book-open"></i>
+                                        <span>전체 읽기</span>
+                                    </button>
+                                    <button id="shareVerse" class="secondary-btn">
+                                        <i class="fas fa-share-alt"></i>
+                                        <span>공유하기</span>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div class="quick-stats">
-                            <div class="stat-item">
-                                <i class="fas fa-book"></i>
-                                <span id="totalBooks">-</span>
-                                <label>성경 책</label>
-                            </div>
-                            <div class="stat-item">
-                                <i class="fas fa-chapter"></i>
-                                <span id="totalChapters">-</span>
-                                <label>총 장</label>
+                            
+                            <div class="inspiration-quote">
+                                <i class="fas fa-quote-left"></i>
+                                <p>"말씀은 내 발의 등이요 내 길의 빛이로다"</p>
+                                <span>- 시편 119:105</span>
                             </div>
                         </div>
                     </div>
