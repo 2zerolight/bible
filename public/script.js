@@ -434,6 +434,11 @@ class BibleViewer {
     // 오늘의 말씀 전체 읽기
     async readDailyVerse() {
         try {
+            // books가 로드되지 않았다면 먼저 로드
+            if (!this.books || this.books.length === 0) {
+                await this.loadBooks();
+            }
+            
             const response = await fetch('/api/bible/daily-verse');
             const data = await response.json();
             
@@ -444,6 +449,8 @@ class BibleViewer {
                 if (book) {
                     this.currentBook = { id: verse.bookId, name: book.name };
                     await this.navigateToVerse(verse.bookId, verse.chapterId, verse.verseId);
+                } else {
+                    console.error('책을 찾을 수 없습니다:', verse.bookId);
                 }
             }
         } catch (error) {
