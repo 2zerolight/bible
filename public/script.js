@@ -439,7 +439,12 @@ class BibleViewer {
             
             if (data.success) {
                 const verse = data.data;
-                await this.navigateToVerse(verse.bookId, verse.chapterId, verse.verseId);
+                // bookName을 찾아서 설정
+                const book = this.books.find(b => b.id === verse.bookId);
+                if (book) {
+                    this.currentBook = { id: verse.bookId, name: book.name };
+                    await this.navigateToVerse(verse.bookId, verse.chapterId, verse.verseId);
+                }
             }
         } catch (error) {
             console.error('오늘의 말씀을 읽는 중 오류:', error);
