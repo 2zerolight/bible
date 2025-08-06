@@ -434,23 +434,36 @@ class BibleViewer {
     // 오늘의 말씀 전체 읽기
     async readDailyVerse() {
         try {
+            console.log('readDailyVerse 시작');
+            console.log('현재 books:', this.books);
+            
             // books가 로드되지 않았다면 먼저 로드
             if (!this.books || this.books.length === 0) {
+                console.log('books 로드 중...');
                 await this.loadBooks();
+                console.log('books 로드 완료:', this.books);
             }
             
             const response = await fetch('/api/bible/daily-verse');
             const data = await response.json();
+            console.log('daily verse API 응답:', data);
             
             if (data.success) {
                 const verse = data.data;
+                console.log('verse 데이터:', verse);
+                console.log('찾을 bookId:', verse.bookId);
+                
                 // bookName을 찾아서 설정
                 const book = this.books.find(b => b.id === verse.bookId);
+                console.log('찾은 book:', book);
+                
                 if (book) {
                     this.currentBook = { id: verse.bookId, name: book.name };
+                    console.log('설정된 currentBook:', this.currentBook);
                     await this.navigateToVerse(verse.bookId, verse.chapterId, verse.verseId);
                 } else {
                     console.error('책을 찾을 수 없습니다:', verse.bookId);
+                    console.log('사용 가능한 books:', this.books.map(b => ({ id: b.id, name: b.name })));
                 }
             }
         } catch (error) {
@@ -488,8 +501,18 @@ class BibleViewer {
     // 특정 절로 이동하고 하이라이트
     async navigateToVerse(bookId, chapterId, verseId) {
         try {
-            // 책 선택
-            this.currentBook = { id: bookId };
+            console.log('navigateToVerse 시작:', { bookId, chapterId, verseId });
+            console.log('현재 currentBook:', this.currentBook);
+            
+            // 책 선택 (currentBook이 이미 설정되어 있다면 유지)
+            if (!this.currentBook || !this.currentBook.name) {
+                const book = this.books.find(b => b.id === bookId);
+                if (book) {
+                    this.currentBook = { id: bookId, name: book.name };
+                    console.log('navigateToVerse에서 설정된 currentBook:', this.currentBook);
+                }
+            }
+            
             await this.selectChapter(chapterId);
             
             // 잠시 대기 후 해당 절로 스크롤하고 하이라이트
